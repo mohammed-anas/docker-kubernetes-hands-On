@@ -1,8 +1,8 @@
 #!/bin/bash
 echo "Configuring Task Manager on this node."
 FLINK_NUM_TASK_SLOTS=${FLINK_NUM_TASK_SLOTS:-`grep -c ^processor /proc/cpuinfo`}
-FLINK_MASTER_PORT_6123_TCP_ADDR=`host ${FLINK_MASTER_PORT_6123_TCP_ADDR} | grep "has address" | awk '{print $4}'`
-sed -i -e "s/jobmanager.rpc.address: localhost/jobmanager.rpc.address: $FLINK_MASTER_PORT_6123_TCP_ADDR/g" /usr/local/flink-1.10.0/conf/flink-conf.yaml
+JOB_MANAGER_RPC_ADDRESS=`host ${JOB_MANAGER_RPC_ADDRESS} | grep "has address" | awk '{print $4}'`
+sed -i -e "s/jobmanager.rpc.address: localhost/jobmanager.rpc.address: $JOB_MANAGER_RPC_ADDRESS/g" /usr/local/flink-1.10.0/conf/flink-conf.yaml
 sed -i -e "s/taskmanager.numberOfTaskSlots: 1/taskmanager.numberOfTaskSlots: $FLINK_NUM_TASK_SLOTS/g" /usr/local/flink-1.10.0/conf/flink-conf.yaml
 
 echo "blob.server.port: 6124" >> /usr/local/flink/conf/flink-conf.yaml

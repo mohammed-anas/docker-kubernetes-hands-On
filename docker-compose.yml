@@ -2,16 +2,31 @@ version: '3'
 services:
   flink-master:
     image: anas/flink-master:1.10.0
-    hostname: flink-master
-    container_name: flink-master
+    expose:
+      - "6123"
+      - "22"
+      - "8080"
+    # hostname: flink-master
+    # container_name: flink-master
     ports:
       - "8080:8080"
       - "8081:8081"
+    # command: jobmanager
+    environment: 
+      - JOB_MANAGER_RPC_ADDRESS=flink-master
+
   flink-worker:
     image: anas/flink-worker:1.10.0
-    hostname: flink-worker
-    container_name: flink-worker
-    environment: 
-      - FLINK_MASTER_PORT_6123_TCP_ADDR=flink-master
-    depends_on:
+    # hostname: flink-worker
+    # container_name: flink-worker
+    expose:
+      - "6121"
+      - "6122"
+    # command: taskmanager
+    depends_on: 
       - flink-master
+    links:
+      - "flink-master:jobmanager"
+    environment: 
+      - JOB_MANAGER_RPC_ADDRESS=flink-master
+      - FLINK_NUM_TASK_SLOTS=4

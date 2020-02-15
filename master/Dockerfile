@@ -8,6 +8,6 @@ ADD master.sh /
 
 ENV FLINK_MASTER_LOG /usr/local/flink/log
 
-EXPOSE 6123 22 8080
+# EXPOSE 6123 22 8080
 
 CMD ["/bin/bash","/master.sh"]
